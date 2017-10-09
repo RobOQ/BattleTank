@@ -73,3 +73,9 @@ Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Don't store very large StarterContent files
+Content/StarterContent/*
+!Content/StarterContent/Textures
+Content/StarterContent/Textures/*
+!Content/StarterContent/Textures/T_Ground*.uasset
