@@ -4,6 +4,7 @@
 #include "Public/Tank.h"
 #include "Public/CollisionQueryParams.h"
 #include "Engine/World.h"
+#include "Public/DrawDebugHelpers.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -48,15 +49,42 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& outHitLocation) const
 {
-	// TODO: Hook up this code
-	//FCollisionQueryParams queryParams = FCollisionQueryParams(FName(TEXT("Crosshair Line Trace")), true, this);
+	FCollisionQueryParams queryParams = FCollisionQueryParams(FName(TEXT("Crosshair Line Trace")), true, this);
 
-	//FHitResult hitOut = FHitResult(ForceInit);
+	FHitResult hitOut = FHitResult(ForceInit);
 
-	//FVector eyesLocation;
-	//FRotator eyesRotation;
+	FVector eyesLocation;
+	FRotator eyesRotation;
 
-	//PlayerCameraManager->GetActorEyesViewPoint(eyesLocation, eyesRotation);
+	PlayerCameraManager->GetActorEyesViewPoint(eyesLocation, eyesRotation);
+
+	int32 viewportSizeX;
+	int32 viewportSizeY;
+	GetViewportSize(viewportSizeX, viewportSizeY);
+
+	FVector2D screenLocation = FVector2D(viewportSizeX * crossHairXLocation, viewportSizeY * crossHairYLocation);
+
+	// TODO: From here down is still WIP
+	FVector worldCrosshairLocation;
+	FVector worldCrosshairDirection;
+
+	if (DeprojectScreenPositionToWorld(screenLocation.X, screenLocation.Y, worldCrosshairLocation, worldCrosshairDirection))
+	{
+		FVector direction = worldCrosshairLocation - eyesLocation;
+
+		FVector endPoint = eyesLocation + (direction * 100000.0f);
+
+		FHitResult hitOut = FHitResult(ForceInit);
+
+		if (GetWorld()->LineTraceSingleByChannel(hitOut, eyesLocation, endPoint, ECC_Pawn, queryParams))
+		{
+			if (hitOut.bBlockingHit)
+			{
+				outHitLocation = hitOut.Location;
+				return true;
+			}
+		}
+	}
 
 	outHitLocation = FVector(1.0f);
 	return false;
