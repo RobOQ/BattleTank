@@ -55,28 +55,10 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& outHitLocation) cons
 
 	if (GetLookDirection(screenLocation, worldDirection))
 	{
-		// TODO: From here down is WIP
-		FVector eyesLocation;
-		FRotator eyesRotation;
-
-		PlayerCameraManager->GetActorEyesViewPoint(eyesLocation, eyesRotation);
-
-		FVector endPoint = eyesLocation + (worldDirection * 100000.0f);
-
-		FCollisionQueryParams queryParams = FCollisionQueryParams(FName(TEXT("Crosshair Line Trace")), true, this);
-		FHitResult hitOut = FHitResult(ForceInit);
-
-		if (GetWorld()->LineTraceSingleByChannel(hitOut, eyesLocation, endPoint, ECC_Pawn, queryParams))
-		{
-			if (hitOut.bBlockingHit)
-			{
-				outHitLocation = hitOut.Location;
-				return true;
-			}
-		}
+		return GetLookVectorHitLocation(worldDirection, outHitLocation);
 	}
 
-	outHitLocation = FVector(1.0f);
+	outHitLocation = FVector(0.0f);
 	return false;
 }
 
@@ -94,4 +76,19 @@ FVector2D ATankPlayerController::GetCrosshairScreenLocation() const
 	GetViewportSize(viewportSizeX, viewportSizeY);
 
 	return FVector2D(viewportSizeX * crossHairXLocation, viewportSizeY * crossHairYLocation);
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector lookDirection, FVector& hitLocation) const
+{
+	auto startLocation = PlayerCameraManager->GetCameraLocation();
+	auto endLocation = startLocation + (lookDirection * lineTraceRange);
+
+	FHitResult hitResult;
+	if (GetWorld()->LineTraceSingleByChannel(hitResult, startLocation, endLocation, ECC_Visibility))
+	{
+		hitLocation = hitResult.Location;
+		return true;
+	}
+
+	return false;
 }
