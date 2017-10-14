@@ -49,31 +49,21 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& outHitLocation) const
 {
-	FCollisionQueryParams queryParams = FCollisionQueryParams(FName(TEXT("Crosshair Line Trace")), true, this);
+	FVector2D screenLocation = GetCrosshairScreenLocation();
 
-	FHitResult hitOut = FHitResult(ForceInit);
+	FVector worldDirection;
 
-	FVector eyesLocation;
-	FRotator eyesRotation;
-
-	PlayerCameraManager->GetActorEyesViewPoint(eyesLocation, eyesRotation);
-
-	int32 viewportSizeX;
-	int32 viewportSizeY;
-	GetViewportSize(viewportSizeX, viewportSizeY);
-
-	FVector2D screenLocation = FVector2D(viewportSizeX * crossHairXLocation, viewportSizeY * crossHairYLocation);
-
-	// TODO: From here down is still WIP
-	FVector worldCrosshairLocation;
-	FVector worldCrosshairDirection;
-
-	if (DeprojectScreenPositionToWorld(screenLocation.X, screenLocation.Y, worldCrosshairLocation, worldCrosshairDirection))
+	if (GetLookDirection(screenLocation, worldDirection))
 	{
-		FVector direction = worldCrosshairLocation - eyesLocation;
+		// TODO: From here down is WIP
+		FVector eyesLocation;
+		FRotator eyesRotation;
 
-		FVector endPoint = eyesLocation + (direction * 100000.0f);
+		PlayerCameraManager->GetActorEyesViewPoint(eyesLocation, eyesRotation);
 
+		FVector endPoint = eyesLocation + (worldDirection * 100000.0f);
+
+		FCollisionQueryParams queryParams = FCollisionQueryParams(FName(TEXT("Crosshair Line Trace")), true, this);
 		FHitResult hitOut = FHitResult(ForceInit);
 
 		if (GetWorld()->LineTraceSingleByChannel(hitOut, eyesLocation, endPoint, ECC_Pawn, queryParams))
@@ -88,4 +78,20 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& outHitLocation) cons
 
 	outHitLocation = FVector(1.0f);
 	return false;
+}
+
+bool ATankPlayerController::GetLookDirection(FVector2D screenLocation, FVector& lookDirection) const
+{
+	FVector cameraWorldLocation;
+
+	return DeprojectScreenPositionToWorld(screenLocation.X, screenLocation.Y, cameraWorldLocation, lookDirection);
+}
+
+FVector2D ATankPlayerController::GetCrosshairScreenLocation() const
+{
+	int32 viewportSizeX;
+	int32 viewportSizeY;
+	GetViewportSize(viewportSizeX, viewportSizeY);
+
+	return FVector2D(viewportSizeX * crossHairXLocation, viewportSizeY * crossHairYLocation);
 }
