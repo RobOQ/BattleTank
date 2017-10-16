@@ -18,16 +18,12 @@ public:
 
 	void SetBarrelReference(UStaticMeshComponent* barrelToSet);
 
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	// TODO Add SetTurretReference
 
 	void AimAt(FVector hitLocation, float launchSpeed);
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;		
-	
 private:
-	UStaticMeshComponent* barrel = nullptr;
+	void MoveBarrelTowards(FVector aimDirection);
 
+	UStaticMeshComponent* barrel = nullptr;
 };
