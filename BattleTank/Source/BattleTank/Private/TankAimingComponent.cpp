@@ -36,7 +36,7 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
-void UTankAimingComponent::AimAt(FVector hitLocation)
+void UTankAimingComponent::AimAt(FVector hitLocation, float launchSpeed)
 {
 	auto ourTankName = GetOwner()->GetName();
 	auto barrelLocation = barrel->GetComponentLocation();
