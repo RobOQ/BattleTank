@@ -1,7 +1,7 @@
 // Copyright 2017 Robert O'Quinn
 
 #include "TankPlayerController.h"
-#include "Public/Tank.h"
+#include "Tank.h"
 #include "Public/CollisionQueryParams.h"
 #include "Engine/World.h"
 #include "Public/DrawDebugHelpers.h"
