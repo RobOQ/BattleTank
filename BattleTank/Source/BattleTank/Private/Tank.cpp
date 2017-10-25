@@ -2,6 +2,7 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
+#include "Engine/World.h"
 
 
 // Sets default values
@@ -21,6 +22,12 @@ void ATank::SetBarrelReference(UTankBarrel* barrelToSet)
 void ATank::SetTurretReference(UTankTurret* turretToSet)
 {
 	tankAimingComponent->SetTurretReference(turretToSet);
+}
+
+void ATank::Fire()
+{
+	auto time = GetWorld()->GetTimeSeconds();
+	UE_LOG(LogTemp, Warning, TEXT("%f: FIRE!"), time);
 }
 
 // Called when the game starts or when spawned
