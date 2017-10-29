@@ -7,6 +7,7 @@
 #include "Tank.generated.h"
 
 class UTankAimingComponent;
+class UTankMovementComponent;
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
@@ -31,6 +32,9 @@ public:
 protected:
 	UTankAimingComponent* tankAimingComponent = nullptr;
 
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent* tankMovementComponent = nullptr;
+
 private:
 	// Sets default values for this pawn's properties
 	ATank();
@@ -42,13 +46,13 @@ private:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
-	TSubclassOf<AProjectile> projectileBlueprint;
+		TSubclassOf<AProjectile> projectileBlueprint;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float LaunchSpeed = 4000.0f;
+		float LaunchSpeed = 4000.0f;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float reloadTimeInSeconds = 3.0f;
+		float reloadTimeInSeconds = 3.0f;
 
 	double lastFireTime = 0.0;
 
