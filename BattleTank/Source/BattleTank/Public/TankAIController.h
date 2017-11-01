@@ -21,4 +21,7 @@ private:
 	virtual void Tick(float DeltaTime) override;
 	ATank* GetPlayerTank() const;
 	void AimAtPlayerTank();
+
+	UPROPERTY(EditDefaultsOnly)
+	float acceptanceRadius = 3000.0f;
 };

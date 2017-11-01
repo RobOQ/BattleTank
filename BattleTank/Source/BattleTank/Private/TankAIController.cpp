@@ -22,8 +22,9 @@ void ATankAIController::AimAtPlayerTank()
 
 	if (playerTank && ourTank)
 	{
-		// TODO: Move towards the player
-		
+		// Move towards the player
+		MoveToActor(playerTank, acceptanceRadius);
+
 		// Aim towards the player
 		ourTank->AimAt(playerTank->GetActorLocation());
 

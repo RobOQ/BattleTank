@@ -35,3 +35,11 @@ void UTankMovementComponent::IntendTurnRight(float throwValue)
 	// TODO prevent double speed from using double controls
 }
 
+void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
+{
+	auto tankName = GetOwner()->GetName();
+	auto moveVelocityString = MoveVelocity.ToString();
+
+	UE_LOG(LogTemp, Warning, TEXT("%s: MoveVelocity = %s"), *tankName, *moveVelocityString);
+}
+
