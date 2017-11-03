@@ -18,8 +18,6 @@ void UTankMovementComponent::IntendMoveForward(float throwValue)
 
 	leftTrack->SetThrottle(throwValue);
 	rightTrack->SetThrottle(throwValue);
-
-	// TODO prevent double speed from using double controls
 }
 
 void UTankMovementComponent::IntendTurnRight(float throwValue)
@@ -31,8 +29,6 @@ void UTankMovementComponent::IntendTurnRight(float throwValue)
 
 	leftTrack->SetThrottle(throwValue);
 	rightTrack->SetThrottle(-throwValue);
-
-	// TODO prevent double speed from using double controls
 }
 
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
@@ -40,7 +36,6 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 	auto aiForwardIntention = MoveVelocity.GetSafeNormal();
 	auto tankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
 
-	// == cos(theta)
 	auto forwardThrow = FVector::DotProduct(aiForwardIntention, tankForward);
 	IntendMoveForward(forwardThrow);
 
