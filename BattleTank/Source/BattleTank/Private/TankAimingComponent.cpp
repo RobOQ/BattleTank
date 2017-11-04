@@ -16,61 +16,61 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* barrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
-	if (!barrelToSet)
+	if (!BarrelToSet)
 	{
 		return;
 	}
 
-	barrel = barrelToSet;
+	Barrel = BarrelToSet;
 }
 
-void UTankAimingComponent::SetTurretReference(UTankTurret* turretToSet)
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
 {
-	if (!turretToSet)
+	if (!TurretToSet)
 	{
 		return;
 	}
 
-	turret = turretToSet;
+	Turret = TurretToSet;
 }
 
-void UTankAimingComponent::AimAt(FVector hitLocation, float launchSpeed)
+void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
-	if (!barrel)
+	if (!Barrel)
 	{
 		return;
 	}
 
-	FVector outLaunchVelocity = FVector(0.0f);
-	FVector startLocation = barrel->GetSocketLocation(FName("Projectile"));
+	FVector OutLaunchVelocity = FVector(0.0f);
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	
-	auto haveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, outLaunchVelocity, startLocation, hitLocation, launchSpeed, false, 0.0f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace);
+	auto HaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation, HitLocation, LaunchSpeed, false, 0.0f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace);
 
 	// Calculate the outLaunchVelocity
-	if (haveAimSolution)
+	if (HaveAimSolution)
 	{
-		auto aimDirection = outLaunchVelocity.GetSafeNormal();
-		MoveBarrelTowards(aimDirection);
+		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		MoveBarrelTowards(AimDirection);
 	}
 }
 
-void UTankAimingComponent::MoveBarrelTowards(FVector aimDirection)
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
-	if (!barrel || !turret)
+	if (!Barrel || !Turret)
 	{
 		return;
 	}
 
 	// Calculate difference between current barrel rotation and aimDirection
-	auto barrelRotator = barrel->GetForwardVector().Rotation();
-	auto aimAsRotator = aimDirection.Rotation();
-	auto deltaRotator = aimAsRotator - barrelRotator;
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-	barrel->Elevate(deltaRotator.Pitch);
+	Barrel->Elevate(DeltaRotator.Pitch);
 
-	auto yaw = deltaRotator.Yaw;
-	yaw = FRotator::NormalizeAxis(yaw);
-	turret->Rotate(yaw);
+	auto Yaw = DeltaRotator.Yaw;
+	Yaw = FRotator::NormalizeAxis(Yaw);
+	Turret->Rotate(Yaw);
 }
