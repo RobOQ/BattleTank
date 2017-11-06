@@ -20,7 +20,7 @@ void ATankAIController::AimAtPlayerTank()
 	auto playerTank = GetPlayerTank();
 	auto ourTank = Cast<ATank>(GetPawn());
 
-	if (playerTank && ourTank)
+	if (ensure(playerTank && ourTank))
 	{
 		// Move towards the player
 		MoveToActor(playerTank, acceptanceRadius);
@@ -39,11 +39,11 @@ ATank* ATankAIController::GetPlayerTank() const
 
 	auto playerController = GetWorld()->GetFirstPlayerController();
 
-	if (playerController)
+	if (ensure(playerController))
 	{
 		auto playerPawn = playerController->GetPawn();
 
-		if (playerPawn)
+		if (ensure(playerPawn))
 		{
 			playerTank = Cast<ATank>(playerController->GetPawn());
 		}
