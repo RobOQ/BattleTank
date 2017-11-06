@@ -13,6 +13,15 @@ ATank::ATank()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+
+	UE_LOG(LogTemp, Warning, TEXT("[KOALA] ATank() constructor: %s"), *GetName());
+}
+
+void ATank::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UE_LOG(LogTemp, Warning, TEXT("[KOALA] ATank::BeginPlay(): %s"), *GetName());
 }
 
 void ATank::Fire()
