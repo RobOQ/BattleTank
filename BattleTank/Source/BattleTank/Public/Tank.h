@@ -40,9 +40,9 @@ private:
 	float LaunchSpeed = 4000.0f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float reloadTimeInSeconds = 3.0f;
+	float ReloadTimeInSeconds = 3.0f;
 
-	double lastFireTime = 0.0;
+	double LastFireTime = 0.0;
 
 	UTankBarrel* barrel = nullptr; // TODO: Remove
 };

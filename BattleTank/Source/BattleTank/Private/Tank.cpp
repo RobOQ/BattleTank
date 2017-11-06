@@ -26,7 +26,7 @@ void ATank::BeginPlay()
 
 void ATank::Fire()
 {
-	bool isReloaded = (FPlatformTime::Seconds() - lastFireTime) > reloadTimeInSeconds;
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 	if (barrel && isReloaded)
 	{
 		FVector startLocation = barrel->GetSocketLocation(FName("Projectile"));
@@ -35,7 +35,7 @@ void ATank::Fire()
 		auto projectile = GetWorld()->SpawnActor<AProjectile>(projectileBlueprint, startLocation, startRotation);
 
 		projectile->LaunchProjectile(LaunchSpeed);
-		lastFireTime = FPlatformTime::Seconds();
+		LastFireTime = FPlatformTime::Seconds();
 	}
 }
 
