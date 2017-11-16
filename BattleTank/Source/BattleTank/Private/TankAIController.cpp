@@ -3,6 +3,7 @@
 #include "TankAIController.h"
 #include "Public/Tank.h"
 #include "Engine/World.h"
+// Depends on movement component via pathfinding system
 
 void ATankAIController::BeginPlay()
 {
@@ -17,37 +18,37 @@ void ATankAIController::Tick(float DeltaTime)
 
 void ATankAIController::AimAtPlayerTank()
 {
-	auto playerTank = GetPlayerTank();
-	auto ourTank = Cast<ATank>(GetPawn());
+	auto PlayerTank = GetPlayerTank();
+	auto OurTank = Cast<ATank>(GetPawn());
 
-	if (ensure(playerTank && ourTank))
+	if (ensure(PlayerTank && OurTank))
 	{
 		// Move towards the player
-		MoveToActor(playerTank, acceptanceRadius);
+		MoveToActor(PlayerTank, acceptanceRadius);
 
 		// Aim towards the player
-		ourTank->AimAt(playerTank->GetActorLocation());
+		OurTank->AimAt(PlayerTank->GetActorLocation());
 
 		// TODO: Limit firing rate
-		ourTank->Fire();
+		OurTank->Fire();
 	}
 }
 
 ATank* ATankAIController::GetPlayerTank() const
 {
-	ATank* playerTank = nullptr;
+	ATank* PlayerTank = nullptr;
 
-	auto playerController = GetWorld()->GetFirstPlayerController();
+	auto PlayerController = GetWorld()->GetFirstPlayerController();
 
-	if (ensure(playerController))
+	if (ensure(PlayerController))
 	{
-		auto playerPawn = playerController->GetPawn();
+		auto PlayerPawn = PlayerController->GetPawn();
 
-		if (ensure(playerPawn))
+		if (ensure(PlayerPawn))
 		{
-			playerTank = Cast<ATank>(playerController->GetPawn());
+			PlayerTank = Cast<ATank>(PlayerController->GetPawn());
 		}
 	}
 
-	return playerTank;
+	return PlayerTank;
 }
