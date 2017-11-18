@@ -1,7 +1,6 @@
 // Copyright 2017 Robert O'Quinn
 
 #include "TankPlayerController.h"
-#include "Tank.h"
 #include "Public/CollisionQueryParams.h"
 #include "Engine/World.h"
 #include "Public/DrawDebugHelpers.h"
@@ -10,7 +9,7 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	auto AimingComponent = GetAimingComponent();
 	if (!ensure(AimingComponent))
 	{
 		return;
@@ -25,14 +24,10 @@ void ATankPlayerController::Tick(float DeltaTime)
 	AimTowardsCrosshair();
 }
 
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank())
+	auto AimingComponent = GetAimingComponent();
+	if (!ensure(AimingComponent))
 	{
 		return;
 	}
@@ -44,8 +39,13 @@ void ATankPlayerController::AimTowardsCrosshair()
 	// to the default (aim straight ahead)?
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		GetControlledTank()->AimAt(HitLocation);
+		AimingComponent->AimAt(HitLocation);
 	}
+}
+
+UTankAimingComponent* ATankPlayerController::GetAimingComponent() const
+{
+	return GetPawn()->FindComponentByClass<UTankAimingComponent>();
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& outHitLocation) const

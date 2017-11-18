@@ -6,7 +6,7 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-class ATank;
+class UTankAimingComponent;
 
 /**
  * 
@@ -19,8 +19,10 @@ class BATTLETANK_API ATankAIController : public AAIController
 private:
 	void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-	ATank* GetPlayerTank() const;
+	APawn* GetPlayerPawn() const;
 	void AimAtPlayerTank();
+
+	UTankAimingComponent* GetAimingComponent() const;
 
 	UPROPERTY(EditDefaultsOnly)
 	float acceptanceRadius = 1500.0f;

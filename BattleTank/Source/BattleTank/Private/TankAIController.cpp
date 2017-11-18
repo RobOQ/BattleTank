@@ -1,13 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAIController.h"
-#include "Public/Tank.h"
 #include "Engine/World.h"
+#include "Public/TankAimingComponent.h"
 // Depends on movement component via pathfinding system
 
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
+	auto AimingComponent = GetAimingComponent();
+	if (!ensure(AimingComponent))
+	{
+		return;
+	}
 }
 
 void ATankAIController::Tick(float DeltaTime)
@@ -18,37 +23,44 @@ void ATankAIController::Tick(float DeltaTime)
 
 void ATankAIController::AimAtPlayerTank()
 {
-	auto PlayerTank = GetPlayerTank();
-	auto OurTank = Cast<ATank>(GetPawn());
+	auto PlayerTank = GetPlayerPawn();
+	auto OurTank = GetPawn();
 
-	if (ensure(PlayerTank && OurTank))
+	if (!ensure(PlayerTank && OurTank))
 	{
-		// Move towards the player
-		MoveToActor(PlayerTank, acceptanceRadius);
-
-		// Aim towards the player
-		OurTank->AimAt(PlayerTank->GetActorLocation());
-
-		// TODO: Limit firing rate
-		OurTank->Fire();
+		return;
 	}
+
+	// Move towards the player
+	MoveToActor(PlayerTank, acceptanceRadius);
+
+	auto AimingComponent = GetAimingComponent();
+	if (!ensure(AimingComponent))
+	{
+		return;
+	}
+
+	// Aim towards the player
+	AimingComponent->AimAt(PlayerTank->GetActorLocation());
+
+	// TODO: Get firing working again without a dependency on the Tank class
+	//OurTank->Fire();
+}
+UTankAimingComponent* ATankAIController::GetAimingComponent() const
+{
+	return GetPawn()->FindComponentByClass<UTankAimingComponent>();
 }
 
-ATank* ATankAIController::GetPlayerTank() const
+APawn* ATankAIController::GetPlayerPawn() const
 {
-	ATank* PlayerTank = nullptr;
+	APawn* PlayerPawn = nullptr;
 
 	auto PlayerController = GetWorld()->GetFirstPlayerController();
 
 	if (ensure(PlayerController))
 	{
-		auto PlayerPawn = PlayerController->GetPawn();
-
-		if (ensure(PlayerPawn))
-		{
-			PlayerTank = Cast<ATank>(PlayerController->GetPawn());
-		}
+		PlayerPawn = PlayerController->GetPawn();
 	}
 
-	return PlayerTank;
+	return PlayerPawn;
 }
