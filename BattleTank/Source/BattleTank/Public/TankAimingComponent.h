@@ -46,6 +46,8 @@ private:
 
 	virtual void BeginPlay() override;
 
+	bool IsBarrelMoving() const;
+
 	void MoveBarrelTowards(FVector aimDirection);
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
@@ -61,4 +63,6 @@ private:
 
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
+
+	FVector AimDirection;
 };

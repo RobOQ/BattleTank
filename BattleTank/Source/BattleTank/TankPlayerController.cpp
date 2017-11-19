@@ -4,7 +4,7 @@
 #include "Public/CollisionQueryParams.h"
 #include "Engine/World.h"
 #include "Public/DrawDebugHelpers.h"
-#include "Public/TankAimingComponent.h"
+#include "TankAimingComponent.h"
 
 void ATankPlayerController::BeginPlay()
 {

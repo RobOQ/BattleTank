@@ -14,7 +14,7 @@ UTankAimingComponent::UTankAimingComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
+	AimDirection = FVector::ZeroVector;
 	// ...
 }
 
@@ -28,6 +28,14 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
 	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
 	{
 		FiringStatus = EFiringStatus::Reloading;
+	}
+	else if (IsBarrelMoving())
+	{
+		FiringStatus = EFiringStatus::Aiming;
+	}
+	else
+	{
+		FiringStatus = EFiringStatus::Locked;
 	}
 }
 
@@ -52,7 +60,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	// Calculate the outLaunchVelocity
 	if (HaveAimSolution)
 	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 	}
 }
@@ -98,4 +106,16 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto Yaw = DeltaRotator.Yaw;
 	Yaw = FRotator::NormalizeAxis(Yaw);
 	Turret->Rotate(Yaw);
+}
+
+bool UTankAimingComponent::IsBarrelMoving() const
+{
+	if (!ensure(Barrel))
+	{
+		return false;
+	}
+
+	auto BarrelForward = Barrel->GetForwardVector();
+
+	return !BarrelForward.Equals(AimDirection, 0.05f);
 }
