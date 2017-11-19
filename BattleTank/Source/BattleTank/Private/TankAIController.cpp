@@ -42,9 +42,7 @@ void ATankAIController::AimAtPlayerTank()
 
 	// Aim towards the player
 	AimingComponent->AimAt(PlayerTank->GetActorLocation());
-
-	// TODO: Get firing working again without a dependency on the Tank class
-	//OurTank->Fire();
+	AimingComponent->Fire();
 }
 UTankAimingComponent* ATankAIController::GetAimingComponent() const
 {
