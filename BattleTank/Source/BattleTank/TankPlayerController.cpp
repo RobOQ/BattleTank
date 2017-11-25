@@ -45,9 +45,6 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 	FVector HitLocation; // Out parameter
 
-	// TODO: If we don't hit anything with our collision trace,
-	// should we leave the aim as-is, or should we return the aim
-	// to the default (aim straight ahead)?
 	if (GetSightRayHitLocation(HitLocation))
 	{
 		AimingComponent->AimAt(HitLocation);
