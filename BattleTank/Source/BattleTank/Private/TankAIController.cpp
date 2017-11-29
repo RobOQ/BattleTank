@@ -32,7 +32,7 @@ void ATankAIController::AimAtPlayerTank()
 	}
 
 	// Move towards the player
-	MoveToActor(PlayerTank, acceptanceRadius);
+	MoveToActor(PlayerTank, AcceptanceRadius);
 
 	auto AimingComponent = GetAimingComponent();
 	if (!ensure(AimingComponent))
@@ -42,7 +42,11 @@ void ATankAIController::AimAtPlayerTank()
 
 	// Aim towards the player
 	AimingComponent->AimAt(PlayerTank->GetActorLocation());
-	AimingComponent->Fire();
+
+	if (AimingComponent->GetFiringStatus() == EFiringStatus::Locked)
+	{
+		AimingComponent->Fire();
+	}
 }
 UTankAimingComponent* ATankAIController::GetAimingComponent() const
 {

@@ -8,14 +8,15 @@
 
 class UTankAimingComponent;
 
-/**
- * 
- */
 UCLASS()
 class BATTLETANK_API ATankAIController : public AAIController
 {
 	GENERATED_BODY()
 	
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float AcceptanceRadius = 8000.0f;
+
 private:
 	void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
@@ -23,7 +24,4 @@ private:
 	void AimAtPlayerTank();
 
 	UTankAimingComponent* GetAimingComponent() const;
-
-	UPROPERTY(EditDefaultsOnly)
-	float acceptanceRadius = 1500.0f;
 };
