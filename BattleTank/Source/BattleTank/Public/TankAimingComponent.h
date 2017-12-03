@@ -38,7 +38,7 @@ public:
 	EFiringStatus GetFiringStatus() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Status")
-	int GetAmmoRemaining() const;
+	int32 GetAmmoRemaining() const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Status")
@@ -66,7 +66,7 @@ private:
 	float ReloadTimeInSeconds = 3.0f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	int StartingAmmo = 3;
+	int32 AmmoRemaining = 3;
 
 	double LastFireTime = 0.0;
 
@@ -74,6 +74,4 @@ private:
 	UTankTurret* Turret = nullptr;
 
 	FVector AimDirection;
-
-	int AmmoRemaining = 3;
 };
