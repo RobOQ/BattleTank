@@ -19,7 +19,7 @@ protected:
 
 private:
 	void BeginPlay() override;
-
+	virtual void SetPawn(APawn* InPawn) override;
 	virtual void Tick(float DeltaTime) override;
 	
 	// Start the tank moving the barrel so that a shot would hit where the
@@ -33,6 +33,9 @@ private:
 	FVector2D GetCrosshairScreenLocation() const;
 
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const;
+
+	UFUNCTION()
+	void OnTankDeath();
 
 	UPROPERTY(EditDefaultsOnly)
 	float CrossHairXLocation = 0.5f;

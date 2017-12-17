@@ -18,10 +18,14 @@ protected:
 	float AcceptanceRadius = 8000.0f;
 
 private:
-	void BeginPlay() override;
+	virtual void BeginPlay() override;
+	virtual void SetPawn(APawn* InPawn) override;
 	virtual void Tick(float DeltaTime) override;
 	APawn* GetPlayerPawn() const;
 	void AimAtPlayerTank();
 
 	UTankAimingComponent* GetAimingComponent() const;
+
+	UFUNCTION()
+	void OnTankDeath();
 };
