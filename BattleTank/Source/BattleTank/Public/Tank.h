@@ -23,6 +23,7 @@ public:
 private:
 	// Sets default values for this pawn's properties
 	ATank();
+	virtual void BeginPlay() override;
 
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
 
