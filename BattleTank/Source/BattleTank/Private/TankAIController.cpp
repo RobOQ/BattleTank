@@ -86,4 +86,5 @@ APawn* ATankAIController::GetPlayerPawn() const
 void ATankAIController::OnTankDeath()
 {
 	UE_LOG(LogTemp, Warning, TEXT("TankAIController::OnTankDeath()"));
+	GetPawn()->DetachFromControllerPendingDestroy();
 }
